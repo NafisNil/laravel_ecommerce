@@ -99,13 +99,21 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="{{ route('brand.index') }}"
-                                class="nav-link {{ $route == 'product.index' ? 'active' : '' }}">
+                            <a href="{{ route('color.index') }}"
+                                class="nav-link {{ $route == 'color.index' ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Colors</p>
                             </a>
                         </li>
-                        <li class="nav-header">MULTI LEVEL EXAMPLE</li>
+                        <li class="nav-header">Slider</li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('slider.index') }}"
+                                class="nav-link {{ $route == 'slider.index' ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Slider</p>
+                            </a>
+                        </li>
 
                         <li class="nav-header">LABELS</li>
 

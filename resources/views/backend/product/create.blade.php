@@ -9,7 +9,7 @@
                 <div class="card-header">
                     <h3 class="card-title">All Products</h3>
                     <a href="{{ route('product.index') }}" class="btn btn-primary btn-sm float-right"><i
-                            class="fas fa-plus"></i> product list</a>
+                            class="fas fa-list"></i> product list</a>
                 </div>
                 <div class="card-body">
                     @include('backend.sessionMsg')
@@ -32,8 +32,11 @@
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="image-tab" data-bs-toggle="tab" data-bs-target="#image"
-                                    type="button" role="tab" aria-controls="image"
-                                    aria-selected="false">Image</button>
+                                    type="button" role="tab" aria-controls="image" aria-selected="false">Image</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="color-tab" data-bs-toggle="tab" data-bs-target="#color"
+                                    type="button" role="tab" aria-controls="color" aria-selected="false">Color</button>
                             </li>
                         </ul>
                         <div class="tab-content" id="myTabContent">
@@ -111,15 +114,30 @@
                                     <label for="status" class="form-label">Status</label>
                                 </div>
                             </div>
-                             <div class="tab-pane fade" id="image" role="tabpanel" aria-labelledby="image-tab">
+                            <div class="tab-pane fade" id="image" role="tabpanel" aria-labelledby="image-tab">
                                 <div class="mb-3">
                                     <label for="image" class="form-label">Product Image</label>
                                     <input type="file" multiple class="form-control" id="image" name="image[]">
                                 </div>
-                             </div>
+                            </div>
+                            <div class="tab-pane fade" id="color" role="tabpanel" aria-labelledby="color-tab">
+                                <div class="mb-3">
+                                    <label for="color" class="form-label">Product Color</label>
+                                    <br>
+                                        @foreach ($colors as $color)
+                                        <div class="px-3">
+                                            <input type="checkbox" class="form-check-input" id="color_{{ $color->id }}" name="colors[{{ $color->id }}]"
+                                                value="{{ $color->id }}"> <label for="color_{{ $color->id }}" class="form-check-label">{{ $color->name }}</label> <br>
+                                                <input type="text" class="form-control mt-2" name="color_quantity[{{ $color->id }}]" placeholder="Enter quantity for {{ $color->name }}">
+                                        </div>
+                                        @endforeach
+                                   
+                                </div>
+                            </div>
                         </div>
                         <div>
-                            <button type="submit" class="btn btn-outline-success btn-sm"><i class="fas fa-check"></i> Create Product</button>
+                            <button type="submit" class="btn btn-outline-success btn-sm"><i class="fas fa-check"></i>
+                                Create Product</button>
                         </div>
                     </form>
                 </div>

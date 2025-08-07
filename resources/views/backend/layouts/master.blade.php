@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="{{ asset('backend') }}/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('backend') }}/dist/css/adminlte.min.css">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   @livewireStyles
 </head>
 <body class="hold-transition sidebar-mini">
@@ -92,7 +93,7 @@
   });
 </script>
     @livewireScripts
-    @stack('script')
+    @yield('script')
 
 </body>
 </html>

@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Brand;
+use App\Models\Color;
 use App\Models\Product;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 use App\Models\ProductImage;
+use App\Models\ProductColor;
 
 class ProductController extends Controller
 {
@@ -26,13 +28,14 @@ class ProductController extends Controller
         // Logic to show the product creation form
         $categories = Category::all(); // Fetch all categories for the form
         $brands = Brand::all(); // Fetch all brands for the form
-        return view('backend.product.create', compact('categories', 'brands'));
+        $colors = Color::where('status', true)->get(); // Fetch all colors for the form
+        return view('backend.product.create', compact('categories', 'brands', 'colors'));
     }
 
     public function store(Request $request)
     {
         // Validate the request data
-        $validatedData =$request->validate([
+        $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'brand' => 'required',
@@ -62,11 +65,21 @@ class ProductController extends Controller
             'meta_description' => $request->meta_description,
         ]);
         // Logic to store the product
-       if ($request->hasFile('image')) {
-           $this->_uploadImage($request, $product);
-       }
-       return redirect()->route('product.index')->with('success', 'Product created successfully.');
+        if ($request->hasFile('image')) {
+            $this->_uploadImage($request, $product);
+        }
+        if ($request->has('colors')) {
+            foreach ($request->colors as $key => $colorId) {
+                $product->productColors()->create([
+                    'color_id' => $colorId,
+                    'product_id' => $product->id,
+                    'quantity' => $request->color_quantity[$key] ?? 0, //
+                ]);
+            }
+        }
 
+        // Redirect to the product index with success message
+        return redirect()->route('product.index')->with('success', 'Product created successfully.');
     }
 
     public function edit(Product $product)
@@ -74,7 +87,9 @@ class ProductController extends Controller
         // Logic to show the form for editing a product
         $categories = Category::all(); // Fetch all categories for the form
         $brands = Brand::all(); // Fetch all brands for the form
-        return view('backend.product.edit', compact('product', 'categories', 'brands'));
+        $product_colors = $product->productColors->pluck('color_id')->toArray(); // Get color IDs associated with the product
+        $colors = Color::whereNotIn('id', $product_colors)->where('status', true)->get(); // Fetch colors not associated with the product
+        return view('backend.product.edit', compact('product', 'categories', 'brands', 'colors'));
     }
 
     public function update(Request $request, Product $product)
@@ -110,10 +125,17 @@ class ProductController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            
             $this->_uploadImage($request, $product);
         }
-
+        if ($request->has('colors')) {
+            foreach ($request->colors as $key => $colorId) {
+                $product->productColors()->create([
+                    'color_id' => $colorId,
+                    'product_id' => $product->id,
+                    'quantity' => $request->color_quantity[$key] ?? 0, //
+                ]);
+            }
+        }
         return redirect()->route('product.index')->with('success', 'Product updated successfully.');
     }
 
@@ -150,7 +172,6 @@ class ProductController extends Controller
         return redirect()->route('product.index')->with('success', 'Product deleted successfully.');
     }
 
-
     public function destroyImage(ProductImage $image)
     {
         // Delete image file from storage
@@ -160,5 +181,27 @@ class ProductController extends Controller
         }
         $image->delete();
         return back()->with('success', 'Product image deleted successfully.');
+    }
+
+    public function updateColorQuantity(Request $request, $id)
+    {
+        // Validate the request data
+        $request->validate([
+            'quantity' => 'numeric|min:0', // Ensure each quantity is a non-negative number
+        ]);
+
+        $productColor = ProductColor::findOrFail($id);
+        $productColor->update(['quantity' => $request->quantity]);
+
+        return response()->json(['success' => 'Product color quantity updated successfully.']);
+    }
+
+    public function deleteColorQuantity(Request $request, $id)
+    {
+        // Validate the request data
+        $productColor = ProductColor::findOrFail($id);
+        $productColor->delete();
+
+        return response()->json(['success' => 'Product color deleted successfully.']);
     }
 }

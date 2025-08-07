@@ -4,11 +4,15 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\ProductController;
+use App\Http\Controllers\Backend\ColorController;
+use App\Http\Controllers\Backend\SliderController;
+use App\Http\Controllers\Frontend\FrontendController;
 use App\Livewire\Backend\Brand\Index as BrandIndex;
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
+Route::get('/', [FrontendController::class, 'index'])->name('index');
 Auth::routes();
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -36,7 +40,25 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
     Route::put('product/{product}', [ProductController::class, 'update'])->name('product.update');
     Route::delete('product/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
     Route::get('product/image/{image}', [ProductController::class, 'destroyImage'])->name('product.image.destroy');
-    
+    Route::post('product/color/update/{id}', [ProductController::class, 'updateColorQuantity'])->name('product.color.update');
+    Route::post('product/color/delete/{id}', [ProductController::class, 'deleteColorQuantity'])->name('product.color.delete');
+
+
+    //color
+    Route::get('color', [ColorController::class, 'index'])->name('color.index');
+    Route::get('color/create', [ColorController::class, 'create'])->name('color.create');
+    Route::post('color', [ColorController::class, 'store'])->name('color.store');
+    Route::get('color/{color}/edit', [ColorController::class, 'edit'])->name('color.edit');
+    Route::put('color/{color}', [ColorController::class, 'update'])->name('color.update');
+    Route::delete('color/{color}', [ColorController::class, 'destroy'])->name('color.destroy');
+
+    //slider
+    Route::get('slider', [SliderController::class, 'index'])->name('slider.index');
+    Route::get('slider/create', [SliderController::class, 'create'])->name('slider.create');
+    Route::post('slider', [SliderController::class, 'store'])->name('slider.store');
+    Route::get('slider/{slider}/edit', [SliderController::class, 'edit'])->name('slider.edit');
+    Route::put('slider/{slider}', [SliderController::class, 'update'])->name('slider.update');
+    Route::delete('slider/{slider}', [SliderController::class, 'destroy'])->name('slider.destroy');
 
 });
  

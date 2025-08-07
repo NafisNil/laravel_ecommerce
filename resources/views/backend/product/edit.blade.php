@@ -32,8 +32,11 @@
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="image-tab" data-bs-toggle="tab" data-bs-target="#image"
-                                    type="button" role="tab" aria-controls="image"
-                                    aria-selected="false">Image</button>
+                                    type="button" role="tab" aria-controls="image" aria-selected="false">Image</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="color-tab" data-bs-toggle="tab" data-bs-target="#color"
+                                    type="button" role="tab" aria-controls="color" aria-selected="false">Color</button>
                             </li>
                         </ul>
                         <div class="tab-content" id="myTabContent">
@@ -44,14 +47,17 @@
                                     <select class="form-select form-control" id="category" name="category_id">
                                         <option value="">Select Category</option>
                                         @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}" {{ $category->id == $product->category_id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                            <option value="{{ $category->id }}"
+                                                {{ $category->id == $product->category_id ? 'selected' : '' }}>
+                                                {{ $category->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Product Name</label>
-                                    <input type="text" class="form-control" id="name" name="name" value="{{ $product->name }}">
+                                    <input type="text" class="form-control" id="name" name="name"
+                                        value="{{ $product->name }}">
                                 </div>
 
                                 <div class="mb-3">
@@ -59,7 +65,9 @@
                                     <select class="form-select form-control" id="brand" name="brand">
                                         <option value="">Select Brand</option>
                                         @foreach ($brands as $brand)
-                                            <option value="{{ $brand->name }}" {{ $brand->name == $product->brand ? 'selected' : '' }}>{{ $brand->name }}</option>
+                                            <option value="{{ $brand->name }}"
+                                                {{ $brand->name == $product->brand ? 'selected' : '' }}>{{ $brand->name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -76,7 +84,8 @@
                             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                                 <div class="mb-3">
                                     <label for="meta_title" class="form-label">Meta Title</label>
-                                    <input type="text" class="form-control" id="meta_title" name="meta_title" value="{{ $product->meta_title }}">
+                                    <input type="text" class="form-control" id="meta_title" name="meta_title"
+                                        value="{{ $product->meta_title }}">
                                 </div>
                                 <div class="mb-3">
                                     <label for="meta_description" class="form-label">Meta Description</label>
@@ -84,7 +93,8 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="meta_keywords" class="form-label">Meta Keywords</label>
-                                    <input type="text" class="form-control" id="meta_keywords" name="meta_keywords" value="{{ $product->meta_keywords }}">
+                                    <input type="text" class="form-control" id="meta_keywords" name="meta_keywords"
+                                        value="{{ $product->meta_keywords }}">
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
@@ -100,18 +110,21 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="quantity" class="form-label">Quantity</label>
-                                    <input type="number" class="form-control" id="quantity" name="quantity" value="{{ $product->quantity }}">
+                                    <input type="number" class="form-control" id="quantity" name="quantity"
+                                        value="{{ $product->quantity }}">
                                 </div>
                                 <div class="mb-3 form-check">
-                                    <input type="checkbox" class="form-check-input" id="trending" name="trending" {{ $product->trending ? 'checked' : '' }}>
+                                    <input type="checkbox" class="form-check-input" id="trending" name="trending"
+                                        {{ $product->trending ? 'checked' : '' }}>
                                     <label for="trending" class="form-label">Trending</label>
                                 </div>
                                 <div class="mb-3 form-check">
-                                    <input type="checkbox" class="form-check-input" id="status" name="status" {{ $product->status ? 'checked' : '' }}>
+                                    <input type="checkbox" class="form-check-input" id="status" name="status"
+                                        {{ $product->status ? 'checked' : '' }}>
                                     <label for="status" class="form-label">Status</label>
                                 </div>
                             </div>
-                             <div class="tab-pane fade" id="image" role="tabpanel" aria-labelledby="image-tab">
+                            <div class="tab-pane fade" id="image" role="tabpanel" aria-labelledby="image-tab">
                                 <div class="mb-3">
                                     <label for="image" class="form-label">Product Image</label>
                                     <input type="file" multiple class="form-control" id="image" name="image[]">
@@ -120,25 +133,112 @@
                                     @if (!empty($product->productImages))
                                         <div class="row">
                                             @foreach ($product->productImages as $image)
-                                                <div class="m-2 border-1 p-2" style="display:inline-block; position:relative;">
+                                                <div class="m-2 border-1 p-2"
+                                                    style="display:inline-block; position:relative;">
                                                     <a href="{{ URL::to('storage/' . $image->image) }}" target="_blank">
-                                                        <img src="{{ URL::to('storage/' . $image->image) }}" alt="" style="max-height: 100px; max-width: 100px;">
+                                                        <img src="{{ URL::to('storage/' . $image->image) }}"
+                                                            alt="" style="max-height: 100px; max-width: 100px;">
                                                     </a>
                                                     <!-- Delete form moved outside main form below -->
                                                     <span style="position:absolute; top:0; right:0;">
-                                                    
-                                                            <a  href="{{ route('product.image.destroy', $image) }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this image?')">&times;</a>
-                                     
+
+                                                        <a href="{{ route('product.image.destroy', $image) }}"
+                                                            class="btn btn-danger btn-sm"
+                                                            onclick="return confirm('Are you sure you want to delete this image?')">&times;</a>
+
                                                     </span>
                                                 </div>
                                             @endforeach
                                         </div>
                                     @endif
                                 </div>
-                             </div>
+                            </div>
+                            <div class="tab-pane fade" id="color" role="tabpanel" aria-labelledby="color-tab">
+                                <div class="mb-3">
+                                    <h5>Add Product Colors</h5>
+                                    <label for="color" class="form-label">Product Color</label>
+                                    <br>
+                                    @foreach ($colors as $color)
+                                        <div class="px-3">
+                                            <input type="checkbox" class="form-check-input"
+                                                id="color_{{ $color->id }}" name="colors[{{ $color->id }}]"
+                                                value="{{ $color->id }}"> <label for="color_{{ $color->id }}"
+                                                class="form-check-label">{{ $color->name }}</label> <br>
+                                            <input type="text" class="form-control mt-2"
+                                                name="color_quantity[{{ $color->id }}]"
+                                                placeholder="Enter quantity for {{ $color->name }}">
+                                        </div>
+                                    @endforeach
+
+
+
+                                </div>
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Color Name</th>
+
+                                            <th>Quantity</th>
+
+                                            <th>Action</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+
+
+
+
+
+                                        @foreach ($product->productColors as $key => $productColor)
+                                            <tr class="productColorRow">
+                                                <td>{{ ++$key }}</td>
+                                                <td>{{ @$productColor->color->name }}</td>
+                                                <td>
+                                                    <input type="number" name="color_quantity[{{ $productColor->id }}]"
+                                                        value="{{ $productColor->quantity }}"
+                                                        class="form-control productColorQuantity">
+                                                    <br>
+                                                    <button type="button"
+                                                        class="btn btn-outline-success btn-sm updateProductColorBtn"
+                                                        value="{{ $productColor->id }}" title="Update"
+                                                        onclick="return confirm('Are you sure?')"><i
+                                                            class="fas fa-check-square"></i></button>
+                                                </td>
+
+                                                <td>
+
+
+
+
+                                                    <button class="btn btn-outline-danger btn-sm deleteProductColorBtn"
+                                                        title="Delete" value="{{ $productColor->id }}"
+                                                        onclick="return confirm('Are you sure?')"><i
+                                                            class="fas fa-trash"></i></button>
+                                                </td>
+
+                                            </tr>
+                                        @endforeach
+
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Color Name</th>
+
+                                            <th>Quantity</th>
+
+                                            <th>Action</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                         </div>
                         <div>
-                            <button type="submit" class="btn btn-outline-success btn-sm"><i class="fas fa-check"></i> Update Product</button>
+                            <button type="submit" class="btn btn-outline-success btn-sm"><i class="fas fa-check"></i>
+                                Update Product</button>
                         </div>
                     </form>
                 </div>
@@ -146,9 +246,12 @@
 
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var triggerTabList = [].slice.call(document.querySelectorAll('#myTab button'));
@@ -159,6 +262,89 @@
                     tabTrigger.show();
                 });
             });
+        });
+    </script>
+@endsection
+
+@section('script')
+    <script>
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $(document).on('click', '.updateProductColorBtn', function(e) {
+                e.preventDefault();
+                console.log('Update button clicked');
+
+                var colorId = $(this).val();
+                var productId = "{{ $product->id }}";
+                var quantity = $(this).closest('tr').find('.productColorQuantity').val();
+                $.ajax({
+                    type: "POST",
+                    url: "/admin/product/color/update/" + colorId,
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        color_id: colorId,
+                        product_id: productId,
+                        quantity: quantity
+                    },
+                    success: function(response) {
+                        if (response.status && response.status == 'success') {
+                            alert(response.message);
+                        } else {
+                            alert('Error updating color quantity');
+                        }
+                    },
+                    error: function(xhr) {
+                        // Try to show validation errors if present
+                        if (xhr.responseJSON && xhr.responseJSON.errors) {
+                            let messages = Object.values(xhr.responseJSON.errors).flat().join(
+                                '\\n');
+                            alert(messages);
+                        } else {
+                            alert('Error updating color quantity');
+                        }
+                    }
+                });
+            });
+
+            $(document).on('click', '.deleteProductColorBtn', function(e) {
+                e.preventDefault();
+                console.log('Delete button clicked');
+
+                var colorId = $(this).val();
+                var productId = "{{ $product->id }}";
+                $.ajax({
+                    type: "POST",
+                    url: "/admin/product/color/delete/" + colorId,
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        color_id: colorId,
+                        product_id: productId
+                    },
+                    success: function(response) {
+                        if (response.status && response.status == 'success') {
+                            alert(response.message);
+                        } else {
+                            alert('Error deleting color');
+                        }
+                    },
+                    error: function(xhr) {
+                        // Try to show validation errors if present
+                        if (xhr.responseJSON && xhr.responseJSON.errors) {
+                            let messages = Object.values(xhr.responseJSON.errors).flat().join(
+                                '\\n');
+                            alert(messages);
+                        } else {
+                            alert('Error deleting color');
+                        }
+                    }
+                });
+            });
+
+
         });
     </script>
 @endsection
